@@ -2,25 +2,11 @@ const { celebrate, Segments, Joi } = require('celebrate');
 Joi.objectId = require('joi-objectid')(Joi);
 const { regexName, regexEmail, regexUrl } = require('../utils/constant');
 
-const signinValidation = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    email: Joi.string().required().regex(regexEmail),
-    password: Joi.string().required(),
-    name: Joi.string().min(2).max(30).regex(regexName),
-  }).unknown(true),
-});
-
 const signupValidation = celebrate({
   [Segments.BODY]: Joi.object().keys({
     name: Joi.string().min(2).max(30).regex(regexName),
     email: Joi.string().required().regex(regexEmail),
     password: Joi.string().required(),
-  }).unknown(true),
-});
-
-const meIdValidation = celebrate({
-  [Segments.BODY]: Joi.object().keys({
-    userId: Joi.objectId().required(),
   }).unknown(true),
 });
 
@@ -53,9 +39,7 @@ const movieIdValidation = celebrate({
 });
 
 module.exports = {
-  signinValidation,
   signupValidation,
-  meIdValidation,
   updateUserValidation,
   movieValidation,
   movieIdValidation,

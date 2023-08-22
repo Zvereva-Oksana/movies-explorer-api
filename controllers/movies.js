@@ -50,7 +50,7 @@ module.exports.deleteMovie = (req, res, next) => {
       } else if (!JSON.stringify(movie.owner).includes(req.user._id)) {
         throw new ForbiddenError('Попытка удалить фильм другого пользователя.');
       } else {
-        movie.deleteOne().then(() => res.send({ message: 'Фильм успешно удален.' }));
+        return movie.deleteOne().then(() => res.send({ message: 'Фильм успешно удален.' }));
       }
     })
     .catch((err) => {
