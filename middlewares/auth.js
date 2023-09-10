@@ -5,7 +5,7 @@ const { jwtSecret } = require('../config');
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    throw new UnauthorizedError('Необходима авторизация.');
+    return new UnauthorizedError('Токен не передан.');
   }
   const token = authorization.replace('Bearer ', '');
   let payload;
@@ -15,6 +15,9 @@ module.exports = (req, res, next) => {
       jwtSecret,
     );
   } catch (err) {
+    if (err.name === 'JsonWebTokenError') {
+      return next(new UnauthorizedError('Переданный токен некорректен.'));
+    }
     return next(new UnauthorizedError('Необходима авторизация.'));
   }
   req.user = payload;
